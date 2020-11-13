@@ -1,0 +1,69 @@
+let jwt = require('jsonwebtoken');
+var moment = require('moment');
+
+//verificamos si el token es correcto de la cabecera
+let verificaToken = (req, res, next) => {
+  console.log("[verificaToken token]");
+  let token = req.headers['x-access-token'] || req.headers['authorization'] || req.headers['Authorization']; // Express headers are auto converted to lowercase
+  //console.log("req.headers = "+JSON.stringify(req.headers));
+  if(token == undefined){
+    console.log("Se Necesita Token");
+    //return res.status(401).send({ message: "Se Necesita Token" });
+    return res.json(null);
+  }  
+  //console.log("token:" + token);
+  //console.log("secret:" + process.env.SEED_SECRET);
+  if (token.startsWith('Bearer ')) {
+    // Remove Bearer from string
+    token = token.slice(7, token.length);
+  }
+
+  if (token) {
+    var payload = jwt.decode(token, process.env.SEED_SECRET);
+    //console.log("payload : "+JSON.stringify(payload));
+    if(payload == null){
+      console.log("El token tiene formato invalido");
+      return res.json(null);
+    }
+    if (payload.exp <= moment().unix()) {
+      console.log("El token ha expirado");
+      return res.json(null);
+      /*return res
+        .status(401)
+        .send({ message: "El token ha expirado" });*/
+    };
+
+    jwt.verify(token, process.env.SEED_SECRET, (err, decoded) => {
+      if (err) {
+        console.log("Token No es Valido");
+        return res.json(null);
+      } else {
+        console.log("Verificacion Correcta de Token");
+        //req.decoded = decoded;
+        req.user = decoded.user;
+        next();
+      }
+    });
+  } else {
+    console.log("Auth token is not supplied");
+    return res.json(null);
+  }
+};
+
+
+let crearToken = function(user) {
+ // console.log("crearToken = "+JSON.stringify(user));
+  var payload = {
+    //sub: user,
+    user: user,
+    iat: moment().unix()
+  };
+  return jwt.sign(payload, process.env.SEED_SECRET, { expiresIn: process.env.CADUCIDAD_TOKEN });
+};
+
+
+
+module.exports = {
+  verificaToken: verificaToken,
+  crearToken:crearToken
+}

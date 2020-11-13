@@ -1,0 +1,44 @@
+{
+  "name": "tramite_backend",
+  "version": "1.0.0",
+  "description": "Tramite Documentario Web",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "migrate": "node database/migration.js",
+    "seed": "node database/seeder.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://pucpchristian@bitbucket.org/pucpchristian/tramite_backend.git"
+  },
+  "author": "Christian Ochoa",
+  "license": "MIT",
+  "homepage": "https://bitbucket.org/pucpchristian/tramite_backend#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "body-parser": "^1.19.0",
+    "connect-multiparty": "^2.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.6.1",
+    "faker": "^5.1.0",
+    "jwt-simple": "^0.5.6",
+    "moment": "^2.27.0",
+    "mongoose": "^5.10.0",
+    "mongoose-paginate-v2": "^1.3.9",
+    "mysql": "^2.18.1",
+    "mysql-migrations": "^1.0.6",
+    "node-jasper": "^0.2.5",
+    "socket.io": "^2.3.0",
+    "socketio-jwt": "^4.6.2",
+    "uuid": "^8.3.0",
+    "validator": "^13.1.1"
+  },
+  "devDependencies": {
+    "mysql-db-seed": "0.0.4",
+    "nodemon": "^2.0.4"
+  }
+}

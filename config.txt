@@ -1,0 +1,14 @@
+//vencimiento del token
+// 60 segundos, 60 minutos,24horas,30dias
+//process.env.CADUCIDAD_TOKEN = 60*60*24*30;
+//process.env.CADUCIDAD_TOKEN = 60*60*24;
+process.env.CADUCIDAD_TOKEN = "60m";
+// seed token
+process.env.SEED_SECRET = process.env.SEED_SECRET || 'cochoa';
+
+process.env.PORT = process.env.PORT || 3000;
+
+module.exports = {
+    'secret': 'grokonez-super-secret-key',
+    ROLEs: ['USER', 'ADMIN', 'PM']
+};

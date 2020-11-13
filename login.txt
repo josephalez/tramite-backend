@@ -1,0 +1,213 @@
+const express = require('express');
+const router = express.Router();
+const config = require('../config/config.js');
+const dbConn = require('../config/conexion.js');
+var jwt = require('jsonwebtoken');
+let middleware = require('../middlewares/autenticacion.js');
+
+
+router.post("/api/login", function (req, res) {
+    let email = req.body.email;
+    let password = req.body.password;
+    //let query = "SELECT * FROM opero_master_usuario where username = '" + email + "' and password = '" + password + "'";
+    let query = "SELECT * FROM opero_master_usuario where username = '" + email + "' ";
+    console.log("[post(/api/login)] body : " + JSON.stringify(req.body) + " - query = " + query);
+    dbConn.query(query, function (error, results, fields) {
+        if (error) throw error;
+        if (results.length > 0) {            
+            let user = results[0];
+            //verificamos possword
+            if(user.password != password){
+                console.log("Password Incorrecto");
+                res.status(404);
+                res.statusMessage = 'Password Incorrecto'
+                let respuesta = res.json(null);
+                return respuesta;
+            }
+            user.roles = [4]; // cochoa
+            user.password = '';
+            let token = middleware.crearToken(user);
+            console.log("Se Creo Token : " + JSON.stringify(user));
+            res.status(200).json({
+                success: true,
+                message: 'Authorization successful!',
+                accessToken: token
+            });
+
+        } else {
+            console.log("Usuario no Encontrado");
+            res.status(404);
+            res.statusMessage = 'Usuario no Encontrado'
+            let respuesta = res.json(null);
+            return respuesta;
+        }
+
+    });
+
+});
+
+
+router.get("/api/user", middleware.verificaToken, function (req, res) {
+    console.log("[get(/api/user)]");
+    //console.log("body : " + JSON.stringify(req.body) + " - headers : " + JSON.stringify(req.headers));
+
+    if (req.user == undefined) {
+        console.log("Usuario no existe: ");
+        const users = res.json(null);
+    } else {
+        console.log("user si existe : ");
+        //console.log("user si existe : " + JSON.stringify(req.user));
+        const users = res.json(req.user);
+    }
+
+
+});
+
+const usuarios_short = [
+    {
+        id: 1,
+        username: 'admin',
+        password: 'demo',
+        email: 'admin@demo.com',
+        accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6eyJpZCI6NTI4LCJ1c2VybmFtZSI6InNqbCIsInBhc3N3b3JkIjoic2psIiwiZW1haWwiOiJzamwiLCJhY2Nlc3NUb2tlbiI6ImFjY2Vzcy10b2tlbi04ZjNhZTgzNmRhNzQ0MzI5YTZmOTNiZjIwNTk0YjVjYyIsInJlZnJlc2hUb2tlbiI6ImFjY2Vzcy10b2tlbi1mOGMxMzdhMmM5ODc0M2Y0OGI2NDNlNzExNjFkOTBhYSIsInJvbGVzIjoiWzFdIiwicGljIjoiLi9hc3NldHMvbWVkaWEvdXNlcnMvbWVkaWNvMTI4LnBuZyIsImZ1bGxuYW1lIjoic2psIiwib2NjdXBhdGlvbiI6IkNFTyIsImNvbXBhbnlOYW1lIjoiS2VlbnRoZW1lcyIsInBob25lIjoiNDU2NjY5MDY3ODkwIn0sImlhdCI6MTU4NzA5MTEzNCwiZXhwIjoxNTg3MDkxNzM0fQ.YQ7BLRtFHNm4k9eOpgdGfNRYHaaPSGaMWcdvVV5uEK0',
+        refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6eyJpZCI6NTI4LCJ1c2VybmFtZSI6InNqbCIsInBhc3N3b3JkIjoic2psIiwiZW1haWwiOiJzamwiLCJhY2Nlc3NUb2tlbiI6ImFjY2Vzcy10b2tlbi04ZjNhZTgzNmRhNzQ0MzI5YTZmOTNiZjIwNTk0YjVjYyIsInJlZnJlc2hUb2tlbiI6ImFjY2Vzcy10b2tlbi1mOGMxMzdhMmM5ODc0M2Y0OGI2NDNlNzExNjFkOTBhYSIsInJvbGVzIjoiWzFdIiwicGljIjoiLi9hc3NldHMvbWVkaWEvdXNlcnMvbWVkaWNvMTI4LnBuZyIsImZ1bGxuYW1lIjoic2psIiwib2NjdXBhdGlvbiI6IkNFTyIsImNvbXBhbnlOYW1lIjoiS2VlbnRoZW1lcyIsInBob25lIjoiNDU2NjY5MDY3ODkwIn0sImlhdCI6MTU4NzA5MTEzNCwiZXhwIjoxNTg3MDkxNzM0fQ.YQ7BLRtFHNm4k9eOpgdGfNRYHaaPSGaMWcdvVV5uEK0',
+        //roles: [1], // Administrator
+        pic: './assets/media/users/medico128.png',
+        fullname: 'Sean',
+        occupation: 'CEO',
+        companyName: 'Keenthemes',
+        phone: '456669067890'
+
+    }];
+
+
+const json_address = {
+    addressLine: 'L-12-20 Vertex, Cybersquare',
+    city: 'San Francisco',
+    state: 'California',
+    postCode: '45000'
+};
+
+router.get("/api/users", function (req, res) {
+
+    dbConn.query("SELECT * FROM opero_master_usuario", function (error, results, fields) {
+        if (error) throw error;
+
+        results = usuarios;
+
+        for (let element of usuarios) {
+            //element.address = JSON.parse(json_address);
+        }
+
+        const users = res.json(usuarios);
+        console.log("get(/api/users");
+        //console.log(users);
+        return users;
+    });
+
+});
+
+
+router.get("/api/cars", function (req, res) {
+    const users = res.json(cars);
+    /*dbConn.query("SELECT * FROM opero_master_usuario", function (error, results, fields) {
+        if (error) throw error;
+
+        results = cars;
+
+        const users = res.json(cars);
+        //console.log("get(/api/users");
+        //console.log(users);
+        return results;
+    });*/
+
+});
+
+const cars = [
+    {
+        id: 1,
+        model: 'Elise',
+        manufacture: 'Lotus',
+        modelYear: 2004,
+        mileage: 116879,
+        // tslint:disable-next-line:max-line-length
+        description: `The Lotus Elise first appeared in 1996 and revolutionised small sports car design with its lightweight extruded aluminium chassis and composite body. There have been many variations, but the basic principle remain the same.`,
+        color: 'Red',
+        price: 18347,
+        condition: 1,
+        createdDate: '09/30/2017',
+        status: 0,
+        VINCode: '1FTWX3D52AE575540',
+        _userId: 1,
+        _createdDate: '03/31/2015',
+        _updatedDate: '05/08/2015'
+    }, {
+        id: 2,
+        model: 'Sunbird',
+        manufacture: 'Pontiac',
+        modelYear: 1984,
+        mileage: 99515,
+        // tslint:disable-next-line:max-line-length
+        description: `The Pontiac Sunbird is an automobile that was produced by Pontiac, initially as a subcompact for the 1976 to 1980 model years,and later as a compact for the 1982 to 1994 model years. The Sunbird badge ran for 18 years (with a hiatus during the 1981 and 1982 model years, as the 1982 model was called J2000) and was then replaced in 1995 by the Pontiac Sunfire. Through the years the Sunbird was available in notchback coupé, sedan, hatchback, station wagon, and convertible body styles.`,
+        color: 'Khaki',
+        price: 165956,
+        condition: 0,
+        createdDate: '03/22/2018',
+        status: 1,
+        VINCode: 'JM1NC2EF8A0293556',
+        _userId: 1,
+        _createdDate: '11/11/2016',
+        _updatedDate: '09/01/2016'
+    }];
+
+const permiso = [
+    { id: 1, name: 'accessToECommerceModule', level: 1, title: 'eCommerce module' },
+    { id: 2, name: 'accessToAuthModule', level: 1, title: 'Users Management module' },
+    { id: 3, name: 'accessToMailModule', level: 1, title: 'Mail module' },
+    { id: 4, name: 'canReadECommerceData', level: 2, parentId: 1, title: 'Read' },
+    { id: 5, name: 'canEditECommerceData', level: 2, parentId: 1, title: 'Edit' },
+    { id: 6, name: 'canDeleteECommerceData', level: 2, parentId: 1, title: 'Delete' },
+    { id: 7, name: 'canReadAuthData', level: 2, parentId: 2, title: 'Read' },
+    { id: 8, name: 'canEditAuthData', level: 2, parentId: 2, title: 'Edit' },
+    { id: 9, name: 'canDeleteAuthData', level: 2, parentId: 2, title: 'Delete' },
+    { id: 10, name: 'canReadMailData', level: 2, parentId: 3, title: 'Read' },
+    { id: 11, name: 'canEditMailData', level: 2, parentId: 3, title: 'Edit' },
+    { id: 12, name: 'canDeleteMailData', level: 2, parentId: 3, title: 'Delete' },
+    { id: 15, name: 'accessToPaciente', level: 1, title: 'xxx' },
+    { id: 16, name: 'canPacienteRead', level: 2, parentId: 15, title: 'xxx1' },
+    { id: 17, name: 'canPacienteEdit', level: 2, parentId: 15, title: 'xxx2' },
+    { id: 18, name: 'canPacienteDelete', level: 2, parentId: 15, title: 'xxx3' },
+    { id: 19, name: 'canPacienteNew', level: 2, parentId: 15, title: 'xxx4' },
+    { id: 20, name: 'accessToEnfermera', level: 1, title: 'xxx' },
+];
+
+router.get("/api/permissions", function (req, res) {
+    dbConn.query("SELECT * FROM opero_master_permissions", function (error, results, fields) {
+        if (error) throw error;
+        //results = permissions;
+        return res.json(permiso);
+    });
+});
+
+const roles = [
+    { id: 1, title: 'Administrator', isCoreRole: true, permissions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] },
+    { id: 2, title: 'Manager', isCoreRole: false, permissions: [1,3, 4, 5,10] },
+    { id: 3, title: 'Guest', isCoreRole: false, permissions: [] },
+    { id: 4, title: 'Enfermera', isCoreRole: false, permissions: [15,16,17,18,19,20] }
+];
+
+router.get("/api/roles", function (req, res) {
+    console.log("[/api/roles]");
+    console.log("roles:"+roles);
+    dbConn.query("SELECT * FROM opero_master_roles", function (error, results, fields) {
+        if (error) throw error;        
+        //results = roles;
+        
+        return res.json(roles);
+    });
+
+});
+
+
+
+module.exports = router;

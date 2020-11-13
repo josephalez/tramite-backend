@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="hoja-ruta" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="745fd5c2-5090-402b-8cd4-a1c6068d5958">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="nro_tramite" class="java.lang.String"/>
+	<parameter name="tipo" class="java.lang.String"/>
+	<parameter name="administrado" class="java.lang.String"/>
+	<parameter name="folios" class="java.lang.String"/>
+	<parameter name="estado" class="java.lang.String"/>
+	<parameter name="asunto" class="java.lang.String"/>
+	<parameter name="registro" class="java.lang.String"/>
+	<parameter name="destino" class="java.lang.String"/>
+	<field name="nro_tramite" class="java.lang.String"/>
+	<field name="tipo" class="java.lang.String"/>
+	<field name="administrado" class="java.lang.String"/>
+	<field name="folios" class="java.lang.String"/>
+	<field name="registro" class="java.lang.String"/>
+	<field name="asunto" class="java.lang.String"/>
+	<field name="estado" class="java.lang.String"/>
+	<field name="destino" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="5059cfb1-00a7-4b36-b847-683a53df5ad8" x="25" y="13" width="150" height="34"/>
+				<textElement markup="none">
+					<font size="16" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[HOJA DE RUTA  #]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="8966402c-0ed7-43a9-803c-8b782846fd03" x="175" y="13" width="357" height="34"/>
+				<textElement>
+					<font size="16" isBold="false" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{nro_tramite}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="f0054e8a-d69e-466c-a9f7-e543933b8943" x="420" y="11" width="124" height="24"/>
+				<textElement>
+					<font size="14" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Número de Folios]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="32777ef9-1e48-4b58-9886-ddfeceff8fc5" x="165" y="11" width="231" height="24"/>
+				<textElement>
+					<font size="14" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Administrado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3387461b-3b98-44b6-b9b3-a54839ac2790" x="26" y="11" width="128" height="24"/>
+				<textElement>
+					<font size="14" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Tipo]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="82" splitType="Stretch">
+			<textField>
+				<reportElement uuid="0b48772c-0716-4544-8eb8-67e0a9034733" x="26" y="12" width="128" height="43"/>
+				<textElement>
+					<font size="11" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{tipo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="d6043a27-80cc-42ec-99a3-fdc344684f84" x="165" y="12" width="231" height="43"/>
+				<textElement>
+					<font size="11" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{administrado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="360a7674-d0a8-41f0-9da0-14cebe8c96db" x="420" y="14" width="112" height="41"/>
+				<textElement textAlignment="Center">
+					<font size="11" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{folios}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="113" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="1c3603e0-3416-47d3-b5ba-3c63710a0da1" x="26" y="8" width="128" height="24"/>
+				<textElement>
+					<font size="14" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Registro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="bcd77aeb-a310-4b01-8960-4a106db9abcb" x="165" y="8" width="231" height="24"/>
+				<textElement>
+					<font size="14" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Asunto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e6139250-b054-4c26-abe3-6bf3b4594c14" x="406" y="8" width="126" height="24"/>
+				<textElement>
+					<font size="14" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Estado]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="1e3f83d6-f098-4224-9ded-c0065e6ec18c" x="406" y="42" width="126" height="43"/>
+				<textElement>
+					<font size="11" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{estado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="d48513e0-f549-4e68-90f4-555c99eaf6ab" x="165" y="42" width="231" height="43"/>
+				<textElement>
+					<font size="11" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{asunto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="68639bed-aad2-4778-9d83-18851372ae0a" x="26" y="42" width="129" height="43"/>
+				<textElement>
+					<font size="11" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{registro}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="34" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="97" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="117" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="78508e80-381a-49c3-9521-59a83411567d" x="26" y="0" width="78" height="36"/>
+				<textElement verticalAlignment="Middle">
+					<font size="16" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Destino:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="c0c1b31f-0b3c-42a5-bfc0-1938ebe0e8c4" x="104" y="0" width="302" height="36"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14" isBold="false" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{destino}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
